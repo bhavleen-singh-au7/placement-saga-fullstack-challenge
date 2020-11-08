@@ -1,9 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 
 const Main = () => {
+  const [ddlVal, setDdlVal] = useState("");
+  const [code, setCode] = useState("");
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
+
+    if (!ddlVal) {
+      return toast.error("Select a Language");
+    }
+    if (!code) {
+      return toast.error("Write Some Code.");
+    }
+
+    return fetch(
+      "https://online-singh-ide.herokuapp.com/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          script: code,
+          language: ddlVal,
+          versionIndex: "0",
+        },
+      }
+    )
+      .then((res) => {
+
+      })
+      .catch((err) => {
+        return toast.error(err);
+      });
   };
 
   return (
@@ -18,24 +50,15 @@ const Main = () => {
         </h3>
         <div className="container">
           <div className="dropdown">
-            <button
-              className="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
+            <select
+              className="btn btn-secondary dropdown-toggle text-light"
+              onChange={(e) => setDdlVal(e.target.value)}
             >
-              Choose Language
-            </button>
-            <div
-              className="dropdown-menu"
-              aria-labelledby="dropdownMenuButton"
-            >
-              <a className="dropdown-item">Python</a>
-              <a className="dropdown-item">C++</a>
-              <a className="dropdown-item">Java</a>
-            </div>
+              <option value="">Choose Language</option>
+              <option value="python3">Python</option>
+              <option value="cpp">C++</option>
+              <option value="java">Java</option>
+            </select>
           </div>
 
           <div className="container mt-2">
@@ -43,14 +66,17 @@ const Main = () => {
               <div className="col-sm-8 py-2">
                 <div>
                   <label
-                    for="exampleFormControlTextarea1"
+                    for="codeEditor"
                     className="font-weight-bold"
                   >
                     Type Code Here:
                   </label>
                   <textarea
+                    onChange={(e) =>
+                      setCode(e.target.value)
+                    }
                     className="form-control"
-                    id="exampleFormControlTextarea1"
+                    id="codeEditor"
                     rows="15"
                   ></textarea>
                 </div>
@@ -77,6 +103,8 @@ const Main = () => {
                     Output:
                   </label>
                   <textarea
+                    readOnly
+                    onChange
                     className="form-control"
                     id="exampleFormControlTextarea1"
                     rows="8"
@@ -94,7 +122,10 @@ const Main = () => {
                 Build and Run
               </button>
 
-              <button type="button" className="btn btn-danger">
+              <button
+                type="button"
+                className="btn btn-danger"
+              >
                 Clear
               </button>
             </div>

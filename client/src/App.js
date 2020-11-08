@@ -1,11 +1,14 @@
-import React from "react";
+import React, { Fragment } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Main from "./pages/Main";
 
 const App = () => {
   return (
-    <div>
+    <Fragment>
+      <ToastContainer />
       <Main />
-    </div>
+    </Fragment>
   );
 };
 
