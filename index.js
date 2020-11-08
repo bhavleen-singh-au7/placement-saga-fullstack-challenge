@@ -1,5 +1,6 @@
 const express = require("express");
 const axios = require("axios");
+const request = require("request");
 require("dotenv").config();
 
 const app = express();
@@ -10,7 +11,7 @@ app.get("/", (req, res) => {
   res.send("Hit POST request from POSTMAN.");
 });
 
-app.post("/", async (req, res) => {
+app.post("/", (req, res) => {
   try {
     const { script, language, versionIndex } = req.body;
 
@@ -24,14 +25,25 @@ app.post("/", async (req, res) => {
       clientSecret: process.env.CLIENT_SECRET,
     };
 
-    const data = await axios.post(endPoint, {
-      json: reqBody,
-    });
+    request(
+      {
+        url: endPoint,
+        method: "POST",
+        json: reqBody,
+      },
+      (err, data) => {
+        if(err){
+          res.status(400).json({
+            error: err.message,
+          });
+        }
+        
+        res.status(200).json({
+          output: data.body,
+        });
+      }
+    );
 
-    console.log("output => ", data);
-    res.status(200).json({
-      output: data,
-    });
   } catch (err) {
     res.status(400).json({
       error: err.message,
