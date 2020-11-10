@@ -5,6 +5,8 @@ import Navbar from "../components/Navbar";
 const Main = () => {
   const [ddlVal, setDdlVal] = useState("");
   const [code, setCode] = useState("");
+  const [input, setInput] = useState("");
+  const [output, setOutput] = useState("");
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -31,7 +33,8 @@ const Main = () => {
       }
     )
       .then((res) => {
-
+        console.log(res);
+        setOutput(res);
       })
       .catch((err) => {
         return toast.error(err);
@@ -66,7 +69,7 @@ const Main = () => {
               <div className="col-sm-8 py-2">
                 <div>
                   <label
-                    for="codeEditor"
+                    htmlFor="codeEditor"
                     className="font-weight-bold"
                   >
                     Type Code Here:
@@ -75,6 +78,7 @@ const Main = () => {
                     onChange={(e) =>
                       setCode(e.target.value)
                     }
+                    value={code}
                     className="form-control"
                     id="codeEditor"
                     rows="15"
@@ -84,12 +88,16 @@ const Main = () => {
               <div className="col-sm-4 py-2">
                 <div>
                   <label
-                    for="exampleFormControlTextarea1"
+                    htmlFor="exampleFormControlTextarea1"
                     className="font-weight-bold"
                   >
                     Input:
                   </label>
                   <textarea
+                    onChange={(e) =>
+                      setInput(e.target.value)
+                    }
+                    value={input}
                     className="form-control"
                     id="exampleFormControlTextarea1"
                     rows="5"
@@ -97,14 +105,17 @@ const Main = () => {
                 </div>
                 <div>
                   <label
-                    for="exampleFormControlTextarea1"
+                    htmlFor="exampleFormControlTextarea1"
                     className="font-weight-bold"
                   >
                     Output:
                   </label>
                   <textarea
+                    onChange={(e) =>
+                      setOutput(e.target.value)
+                    }
+                    value={output}
                     readOnly
-                    onChange
                     className="form-control"
                     id="exampleFormControlTextarea1"
                     rows="8"

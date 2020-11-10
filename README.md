@@ -1,1 +1,0 @@
-# placement-saga-fullstack-challenge
